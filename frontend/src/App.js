@@ -95,7 +95,7 @@ function App() {
         <div className="hero-content">
           <p className="hero-kicker">Community degli studenti di ingegneria di Trieste</p>
           <h1>
-            <img src={logoSvg} alt="εστ engineeringstudentstrieste" className="hero-logo" />
+            <img src={logoSvg} alt="εστ - Engineering Students of Trieste" className="hero-logo" />
           </h1>
           <p className="hero-text">
             Costruiamo relazioni tra studenti, ricercatori e aziende per rendere l&apos;università più aperta, inclusiva e orientata al fare.
@@ -146,7 +146,7 @@ function App() {
           </div>
         </Section>
 
-        <Section id="eventi" kicker="Calendario" title="Eventi in arrivo" variant="dark">
+        <Section id="eventi" kicker="Calendario" title="Eventi in arrivo" variant="green">
           <div className="timeline">
             {events.map(({ title, date, description }) => (
               <article key={title} className="timeline-item">
@@ -192,7 +192,7 @@ function App() {
               </label>
               <label>
                 Email
-                <input type="email" placeholder="email@uni.ts.it" />
+                <input type="email" placeholder="La tua e-mail" />
               </label>
               <label>
                 Messaggio
@@ -215,13 +215,13 @@ function App() {
             ))}
           </div>
           <p className="center-text">
-            Scrivici a <a href="mailto:engineeringstudentstrieste@gmail.com">partnership@engineeringstudentstrieste.it</a> per ricevere il media kit completo.
+            Scrivici a <a href="mailto:engineeringstudentstrieste@gmail.com">engineeringstudentstrieste@gmail.com</a> per ricevere il media kit completo.
           </p>
         </Section>
       </main>
 
       <footer className="site-footer">
-        <p>© {currentYear} εστ engineeringstudentstrieste · Trieste</p>
+        <p>© {currentYear} εστ - Engineering Students of Trieste · Trieste</p>
         <div className="footer-links">
           <a href="#chi-siamo">Manifesto</a>
           <a href="#eventi">Calendario</a>

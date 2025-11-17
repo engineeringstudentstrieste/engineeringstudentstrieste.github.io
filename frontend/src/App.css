@@ -1,4 +1,4 @@
-/* Add local webfonts from src/assets */
+/* Local webfonts from src/assets */
 @font-face {
   font-family: 'AllRoundGothic';
   src: url('./assets/All_Round_Gothic_Book.otf') format('opentype');
@@ -41,6 +41,9 @@
   --white: #ffffff; /* white */
   --text: var(--bg-dark);
   --muted: #6b7280;
+  --light: #5aa3a3; /* light green backgrounds */
+
+  /* font family variable (local fonts first) */
   --font-family: 'AllRoundGothic', 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
 }
 
@@ -148,8 +151,7 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   padding: 5rem 4vw 4rem;
-  background: radial-gradient(circle at top right, rgba(25,87,90,0.06), rgba(255,255,255,0));
-  border-bottom: 1px solid rgba(23, 24, 24, 0.04);
+  background: radial-gradient(circle at top right, var(--light), rgba(255,255,255,0));
 }
 
 .hero-kicker {
@@ -179,11 +181,11 @@
 }
 
 .hero-card {
-  background: var(--bg-dark);
+  background: var(--accent);
   color: var(--white);
   padding: 1.5rem;
   border-radius: 1.25rem;
-  box-shadow: 0 15px 45px rgba(23, 24, 24, 0.25);
+  box-shadow: 0 15px 45px var(--bg-dark);
 }
 
 .hero-card-kicker {
@@ -203,9 +205,9 @@ main {
   padding: 4rem 4vw;
 }
 
-.section-dark {
-  background: var(--bg-dark);
-  color: var(--white);
+.section-green {
+    background: radial-gradient(circle at top right,  var(--light), rgba(255,255,255,0));
+    color: var(--bg-dark);
 }
 
 .section-accent {
@@ -243,7 +245,7 @@ main {
   background: var(--white);
   border-radius: 0.75rem;
   padding: 1rem;
-  box-shadow: 0 8px 25px rgba(23, 24, 24, 0.06);
+  box-shadow: 0 8px 25px rgba(78, 115, 115, 0.33);
 }
 
 .section-dark .bullet-grid li {
@@ -347,8 +349,8 @@ main {
 }
 
 .btn.secondary {
-  background: rgba(23,24,24,0.12);
-  color: var(--white);
+  background: var(--white);
+  color: var(--accent);
   border: 1px solid rgba(255,255,255,0.06);
 }
 

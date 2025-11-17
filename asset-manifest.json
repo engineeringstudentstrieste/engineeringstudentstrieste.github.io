@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/static/css/main.69c40f6a.css",
+    "main.js": "/static/js/main.b1cc21bb.js",
+    "static/js/453.d7446e4a.chunk.js": "/static/js/453.d7446e4a.chunk.js",
+    "static/media/All_Round_Gothic_Bold.otf": "/static/media/All_Round_Gothic_Bold.af40f382cae874197cee.otf",
+    "static/media/All_Round_Gothic_Demi.otf": "/static/media/All_Round_Gothic_Demi.8dd24f200b6e14d6ffc6.otf",
+    "static/media/All_Round_Gothic_Book_Oblique.otf": "/static/media/All_Round_Gothic_Book_Oblique.874b511fbdf856ca8bdd.otf",
+    "static/media/All_Round_Gothic_Medium.otf": "/static/media/All_Round_Gothic_Medium.eeecd4a0daff41c24852.otf",
+    "static/media/All_Round_Gothic_Book.otf": "/static/media/All_Round_Gothic_Book.0345000a54aaae1fdda9.otf",
+    "static/media/logo.svg": "/static/media/logo.fe4b1850875da1ac43c7bd78e0676070.svg",
+    "index.html": "/index.html",
+    "main.69c40f6a.css.map": "/static/css/main.69c40f6a.css.map",
+    "main.b1cc21bb.js.map": "/static/js/main.b1cc21bb.js.map",
+    "453.d7446e4a.chunk.js.map": "/static/js/453.d7446e4a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.69c40f6a.css",
+    "static/js/main.b1cc21bb.js"
+  ]
+}

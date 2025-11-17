@@ -169,7 +169,7 @@ function App() {
               <dl>
                 <dt>Email</dt>
                 <dd>
-                  <a href="mailto:hello@engineeringstudentstrieste.it">hello@engineeringstudentstrieste.it</a>
+                  <a href="mailto:engineeringstudentstrieste@gmail.com">engineeringstudentstrieste@gmail.com</a>
                 </dd>
                 <dt>Instagram</dt>
                 <dd>
@@ -215,7 +215,7 @@ function App() {
             ))}
           </div>
           <p className="center-text">
-            Scrivici a <a href="mailto:partnership@engineeringstudentstrieste.it">partnership@engineeringstudentstrieste.it</a> per ricevere il media kit completo.
+            Scrivici a <a href="mailto:engineeringstudentstrieste@gmail.com">partnership@engineeringstudentstrieste.it</a> per ricevere il media kit completo.
           </p>
         </Section>
       </main>

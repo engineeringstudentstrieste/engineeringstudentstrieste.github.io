@@ -40,7 +40,7 @@
   --bg-dark: #171818; /* deep background / dark sections */
   --white: #ffffff; /* white */
   --text: var(--bg-dark);
-  --muted: #6b7280;
+  --muted: #505965;
   --light: #5aa3a3; /* light green backgrounds */
 
   /* font family variable (local fonts first) */
@@ -265,7 +265,7 @@ main {
   background: var(--white);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 12px 30px rgba(23, 24, 24, 0.06);
+  box-shadow: 0 12px 30px rgba(23, 24, 24, 0.32);
 }
 
 .section-accent .support-card {

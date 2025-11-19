@@ -1,14 +1,19 @@
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import logoSvg from './logo.svg';
 
+// API base (can be overridden with REACT_APP_API_URL in .env)
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 // Navigation anchors used by the sticky navbar.
 const navLinks = [
-  { label: 'Home', target: 'home' },
-  { label: 'Chi siamo', target: 'chi-siamo' },
-  { label: 'Attività', target: 'attivita' },
-  { label: 'Eventi', target: 'eventi' },
-  { label: 'Contatti', target: 'contatti' },
-  { label: 'Supportaci', target: 'supportaci' },
+    { label: 'Home', target: 'home' },
+    { label: 'Chi siamo', target: 'chi-siamo' },
+    { label: 'Attività', target: 'attivita' },
+    { label: 'Eventi', target: 'eventi' },
+    { label: 'Contatti', target: 'contatti' },
+    { label: 'Supportaci', target: 'supportaci' },
+    { label: 'Login', target: 'login' },
 ];
 
 // Highlighted initiatives and labs the student association curates.
@@ -75,6 +80,102 @@ const Section = ({ id, title, kicker, variant = 'light', children }) => (
 
 function App() {
   const currentYear = new Date().getFullYear();
+
+  // Member auth (token-based when backend available)
+  const [member, setMember] = useState(null);
+  const [token, setToken] = useState(null);
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [loadingAuth, setLoadingAuth] = useState(false);
+
+  useEffect(() => {
+    // Try to restore token and member from localStorage
+    const storedToken = localStorage.getItem('est_token');
+    const storedMember = localStorage.getItem('est_member');
+    if (storedToken) {
+      setToken(storedToken);
+      // verify token with backend
+      (async () => {
+        setLoadingAuth(true);
+        try {
+          const res = await fetch(`${API_BASE}/api/auth/me`, {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setMember(data.user);
+            localStorage.setItem('est_member', JSON.stringify(data.user));
+          } else {
+            // token invalid or server unreachable: fallback to stored member if present
+            if (storedMember) setMember(JSON.parse(storedMember));
+            else {
+              localStorage.removeItem('est_token');
+              setToken(null);
+            }
+          }
+        } catch (err) {
+          // network error: fallback to stored member (if any)
+          if (storedMember) setMember(JSON.parse(storedMember));
+        } finally {
+          setLoadingAuth(false);
+        }
+      })();
+    } else if (storedMember) {
+      // no token but stored member => keep demo session
+      try {
+        setMember(JSON.parse(storedMember));
+      } catch (e) { /* ignore */ }
+    }
+  }, []);
+
+  const handleLogin = async () => {
+    setLoginError('');
+    if (!loginEmail || !loginPassword) {
+      setLoginError('Inserisci email e password');
+      return;
+    }
+
+    // Try backend login first
+    try {
+      setLoadingAuth(true);
+      const res = await fetch(`${API_BASE}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setToken(data.token);
+        setMember(data.user);
+        localStorage.setItem('est_token', data.token);
+        localStorage.setItem('est_member', JSON.stringify(data.user));
+        setLoginEmail('');
+        setLoginPassword('');
+        return;
+      }
+      // non-ok: show error from server
+      const err = await res.json().catch(() => ({}));
+      setLoginError(err.message || 'Autenticazione fallita');
+    } catch (err) {
+      // Network or backend down -> fallback to demo client-side auth
+      console.warn('Backend auth failed, falling back to demo mode', err);
+      const m = { email: loginEmail, name: loginEmail.split('@')[0] };
+      setMember(m);
+      localStorage.setItem('est_member', JSON.stringify(m));
+      setLoginEmail('');
+      setLoginPassword('');
+    } finally {
+      setLoadingAuth(false);
+    }
+  };
+
+  const handleLogout = () => {
+    setMember(null);
+    setToken(null);
+    localStorage.removeItem('est_member');
+    localStorage.removeItem('est_token');
+  };
 
   return (
     <div className="site-root">
@@ -218,12 +319,65 @@ function App() {
             Scrivici a <a href="mailto:engineeringstudentstrieste@gmail.com">engineeringstudentstrieste@gmail.com</a> per ricevere il media kit completo.
           </p>
         </Section>
+
+        {/* LOGIN SECTION */}
+        <Section id="login" kicker="Area soci" title="Login soci">
+          {/* if not logged in show form, else show member area */}
+          {!member ? (
+            <div className="contact-form">
+              {loginError && <div style={{ color: 'crimson' }}>{loginError}</div>}
+              <label>
+                Email
+                <input
+                  type="email"
+                  placeholder="email@esempio.it"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                />
+              </label>
+              <label>
+                Password
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                />
+              </label>
+              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <button type="button" className="btn primary" onClick={handleLogin}>
+                  Accedi
+                </button>
+                <button type="button" className="btn ghost" onClick={() => { setLoginEmail(''); setLoginPassword(''); setLoginError(''); }}>
+                  Reset
+                </button>
+              </div>
+              <p style={{ marginTop: '0.75rem', color: '#6b7280' }}>
+                Nota: questa è una demo client-side. Per l'autenticazione reale serve un backend sicuro.
+              </p>
+            </div>
+          ) : (
+            <div className="card">
+              <h3>Benvenuto, {member.name}</h3>
+              <p>Area riservata ai soci: qui puoi trovare risorse, bacheca e iscrizioni.</p>
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                <button className="btn secondary" onClick={() => alert('Sezione membri (demo)')}>
+                  Bacheca soci
+                </button>
+                <button className="btn ghost" onClick={handleLogout}>
+                  Esci
+                </button>
+              </div>
+            </div>
+          )}
+        </Section>
+
       </main>
 
       <footer className="site-footer">
         <p>© {currentYear} εστ - Engineering Students of Trieste · Trieste</p>
         <div className="footer-links">
-          <a href="#chi-siamo">Manifesto</a>
+          <a href="https://drive.google.com/file/d/1HpSKM8S9NzN2G14KpAb6P4QshLbeMI-F/view?usp=sharing">Manifesto</a>
           <a href="#eventi">Calendario</a>
           <a href="#contatti">Unisciti a noi</a>
         </div>

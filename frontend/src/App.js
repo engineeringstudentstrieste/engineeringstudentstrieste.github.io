@@ -9,7 +9,7 @@ const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 const navLinks = [
     { label: 'Home', target: 'home' },
     { label: 'Chi siamo', target: 'chi-siamo' },
-    { label: 'Attività', target: 'attivita' },
+    { label: 'Merch', target: 'merch' },
     { label: 'Eventi', target: 'eventi' },
     { label: 'Contatti', target: 'contatti' },
     { label: 'Supportaci', target: 'supportaci' },
@@ -19,44 +19,48 @@ const navLinks = [
 // Highlighted initiatives and labs the student association curates.
 const initiatives = [
   {
-    title: 'Mentorship & tutoring',
+    title: 'Networking e mentoring',
     description:
-      'Affianchiamo matricole e studenti Erasmus con tutor dedicati per orientamento, esami chiave e pratiche universitarie.',
-  },
-  {
-    title: 'Laboratori tematici',
+      'Colleghiamo studenti di tutti gli anni e indirizzi per condividere appunti, consigli e opportunità anche con alumni ed ex studenti.',
     description:
-      'Dal coding competitivo alla robotica: cicli di workshop guidati da team misti studenti-industria.',
+      '.',
   },
   {
     title: 'Career bridge',
     description:
-      'Visite in azienda, mock interview e revisione CV con professionisti partner di Trieste e dintorni.',
+      'Organizziamo visite guidate presso aziende e centri di ricerca per scoprire il mondo del lavoro e le opportunità locali.',
+    description:
+      '.',
+  },
+  {
+    title: 'Seminari e workshop',
+    description:
+      'Conferenze e laboratori pratici su temi tecnici e trasversali, tenuti da studenti, ricercatori e professionisti del settore.',
   },
 ];
 
 const events = [
   {
-    title: 'Trieste Tech Walk',
-    date: '12 dicembre',
-    description: 'Passeggiata guidata nei principali poli di ricerca con racconti dei ricercatori εστ.',
+    title: 'AperiDIA',
+    date: 'date to be announced',
+    description: 'Aperitivo del Dipartimento di Ingegneria e Architettura a cui εστ sarà presente.',
   },
   {
-    title: 'Hardware Hacknight',
-    date: '20 gennaio',
-    description: 'Notte di prototipazione rapida con kit open-source e mentorship senior.',
+    title: 'Assemblea e Brindisi',
+    date: '10 dicembre 2025',
+    description: 'Assemblea periodica dei soci εστ seguita da brindisi natalizio aperto ai soci.',
   },
   {
-    title: 'Open Lab Day',
-    date: '5 marzo',
+    title: 'Open Day',
+    date: 'date to be announced',
     description: 'Open day dei laboratori εστ per conoscere team, progetti e iscrizioni.',
   },
 ];
 
 const supportActions = [
   {
-    title: 'Diventa mentor',
-    body: 'Dedicando 2 ore al mese accompagni studenti del primo anno nelle scelte accademiche.',
+    title: 'Diventa socio',
+    body: 'Partecipa attivamente alle nostre iniziative iscrivendoti come socio annuale.',
   },
   {
     title: 'Sponsorizza un evento',
@@ -228,23 +232,23 @@ function App() {
             εστ è l&apos;associazione degli studenti di ingegneria di Trieste che promuove mentoring tra pari, divulgazione tecnica e collaborazione con il territorio.
             Operiamo in sinergia con i dipartimenti universitari e con una rete di ambassador nelle principali facoltà.
           </p>
-          <ul className="bullet-grid">
-            <li>Mentorship verticale per ogni indirizzo</li>
-            <li>Community bilingue IT/EN</li>
-            <li>Supporto Erasmus incoming/outgoing</li>
-            <li>Accesso a laboratori e progetti condivisi</li>
-          </ul>
+
+            <div className="card-grid">
+                {initiatives.map(({ title, description }) => (
+                    <article key={title} className="card">
+                        <h3>{title}</h3>
+                        <p>{description}</p>
+                    </article>
+                ))}
+            </div>
         </Section>
 
-        <Section id="attivita" kicker="Percorsi concreti" title="Cosa facciamo">
-          <div className="card-grid">
-            {initiatives.map(({ title, description }) => (
-              <article key={title} className="card">
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </article>
-            ))}
-          </div>
+        <Section id="merch" kicker="La classe non è acqua" title="Merch">
+            <p>
+                Scopri la nostra linea di merchandising ufficiale: magliette, felpe e gadget per mostrare con orgoglio il tuo spirito εστ.
+            </p>
+            <h3>To be announced</h3>
+
         </Section>
 
         <Section id="eventi" kicker="Calendario" title="Eventi in arrivo" variant="green">
@@ -274,14 +278,14 @@ function App() {
                 </dd>
                 <dt>Instagram</dt>
                 <dd>
-                  <a href="https://instagram.com/engineeringstudentstrieste" target="_blank" rel="noreferrer">
-                    @engineeringstudentstrieste
+                  <a href="https://www.instagram.com/epsilonsigmatau/" target="_blank" rel="noreferrer">
+                    @epsilonsigmatau
                   </a>
                 </dd>
-                <dt>Telegram</dt>
+                <dt>Linkedin</dt>
                 <dd>
-                  <a href="https://t.me/est-community" target="_blank" rel="noreferrer">
-                    t.me/est-community
+                  <a href="https://www.linkedin.com/company/epsilonsigmatau/" target="_blank" rel="noreferrer">
+                    epsilonsigmatau
                   </a>
                 </dd>
               </dl>
@@ -292,7 +296,7 @@ function App() {
                 <input type="text" placeholder="Il tuo nome" />
               </label>
               <label>
-                Email
+                E-mail
                 <input type="email" placeholder="La tua e-mail" />
               </label>
               <label>
@@ -330,7 +334,7 @@ function App() {
                 Email
                 <input
                   type="email"
-                  placeholder="email@esempio.it"
+                  placeholder="E-mail"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                 />

@@ -147,7 +147,8 @@
 }
 
 .hero {
-  display: grid;
+    scroll-margin-top: 90px;
+    display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   padding: 5rem 4vw 4rem;
@@ -203,6 +204,8 @@ main {
 
 .section {
   padding: 4rem 4vw;
+    scroll-margin-top: 90px;
+
 }
 
 .section-green {
@@ -262,10 +265,11 @@ main {
 
 .card,
 .support-card {
-  background: var(--white);
+    background: var(--white);
   border-radius: 1rem;
+
   padding: 1.5rem;
-  box-shadow: 0 12px 30px rgba(23, 24, 24, 0.32);
+  box-shadow: 0 8px 25px rgba(78, 115, 115, 0.33);
 }
 
 .section-accent .support-card {
@@ -279,17 +283,22 @@ main {
 }
 
 .timeline-item {
+    align-items: flex-start;
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   border-left: 3px solid var(--accent);
   padding-left: 1rem;
 }
 
 .timeline-date {
+    flex: 0 0 150px;
+    line-height: 1.6;
   min-width: 120px;
   font-weight: 600;
   color: var(--accent);
 }
+
+
 
 .contact-panel {
   display: grid;

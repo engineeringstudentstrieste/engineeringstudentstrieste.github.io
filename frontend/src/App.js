@@ -22,15 +22,11 @@ const initiatives = [
     title: 'Networking e mentoring',
     description:
       'Colleghiamo studenti di tutti gli anni e indirizzi per condividere appunti, consigli e opportunità anche con alumni ed ex studenti.',
-    description:
-      '.',
   },
   {
     title: 'Career bridge',
     description:
       'Organizziamo visite guidate presso aziende e centri di ricerca per scoprire il mondo del lavoro e le opportunità locali.',
-    description:
-      '.',
   },
   {
     title: 'Seminari e workshop',

@@ -212,9 +212,9 @@ function App() {
         </div>
         <div className="hero-card">
           <p className="hero-card-kicker">Prossimo highlight</p>
-          <h3>Open Lab Day · 5 marzo</h3>
+          <h3>Assemblea dei Soci · 10 dicembre</h3>
           <p>
-            Demo di progetti, tour guidati e iscrizioni ai nuovi focus group hardware, energia e AI.
+            Unisciti a noi per l&apos;assemblea periodica dei soci εστ, seguita da un brindisi natalizio aperto a tutti i membri.
           </p>
           <a className="btn secondary" href="#eventi">
             Vai agli eventi

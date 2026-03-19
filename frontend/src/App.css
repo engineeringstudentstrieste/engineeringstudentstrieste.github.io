@@ -395,6 +395,45 @@ main {
   gap: 1rem;
 }
 
+.footer-consent-link {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.cookie-banner {
+  position: fixed;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1000;
+  background: var(--bg-dark);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  box-shadow: 0 18px 40px rgba(23, 24, 24, 0.45);
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cookie-banner p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.cookie-banner-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 640px) {
   .site-nav {
     flex-direction: column;
@@ -403,5 +442,10 @@ main {
 
   .nav-links {
     justify-content: center;
+  }
+
+  .cookie-banner {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

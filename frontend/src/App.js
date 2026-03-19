@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import logoSvg from './logo.svg';
+import CookieBanner from './components/CookieBanner';
+import { CONSENT_KEY, disableAnalytics, enableAnalytics } from './lib/analytics';
 
 // API base (can be overridden with REACT_APP_API_URL in .env)
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -88,6 +90,25 @@ function App() {
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loadingAuth, setLoadingAuth] = useState(false);
+  const [cookieConsent, setCookieConsent] = useState(null);
+  const [openPreferences, setOpenPreferences] = useState(false);
+
+  useEffect(() => {
+    const savedConsent = localStorage.getItem(CONSENT_KEY);
+    if (savedConsent === 'accepted') {
+      setCookieConsent('accepted');
+      enableAnalytics();
+      return;
+    }
+
+    if (savedConsent === 'rejected') {
+      setCookieConsent('rejected');
+      disableAnalytics();
+      return;
+    }
+
+    setCookieConsent(null);
+  }, []);
 
   useEffect(() => {
     // Try to restore token and member from localStorage
@@ -176,6 +197,22 @@ function App() {
     localStorage.removeItem('est_member');
     localStorage.removeItem('est_token');
   };
+
+  const handleAcceptCookies = () => {
+    localStorage.setItem(CONSENT_KEY, 'accepted');
+    setCookieConsent('accepted');
+    setOpenPreferences(false);
+    enableAnalytics();
+  };
+
+  const handleRejectCookies = () => {
+    localStorage.setItem(CONSENT_KEY, 'rejected');
+    setCookieConsent('rejected');
+    setOpenPreferences(false);
+    disableAnalytics();
+  };
+
+  const showCookieBanner = cookieConsent === null || openPreferences;
 
   return (
     <div className="site-root">
@@ -345,8 +382,13 @@ function App() {
                 />
               </label>
               <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <button type="button" className="btn primary" onClick={handleLogin}>
-                  Accedi
+                <button
+                  type="button"
+                  className="btn primary"
+                  onClick={handleLogin}
+                  disabled={loadingAuth}
+                >
+                  {loadingAuth ? 'Accesso in corso...' : 'Accedi'}
                 </button>
                 <button type="button" className="btn ghost" onClick={() => { setLoginEmail(''); setLoginPassword(''); setLoginError(''); }}>
                   Reset
@@ -359,6 +401,7 @@ function App() {
           ) : (
             <div className="card">
               <h3>Benvenuto, {member.name}</h3>
+              <p>{token ? 'Sessione verificata dal backend.' : 'Sessione demo locale.'}</p>
               <p>Area riservata ai soci: qui puoi trovare risorse, bacheca e iscrizioni.</p>
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                 <button className="btn secondary" onClick={() => alert('Sezione membri (demo)')}>
@@ -380,8 +423,24 @@ function App() {
           <a href="https://drive.google.com/file/d/1HpSKM8S9NzN2G14KpAb6P4QshLbeMI-F/view?usp=sharing">Manifesto</a>
           <a href="#eventi">Calendario</a>
           <a href="#contatti">Unisciti a noi</a>
+          <button
+            type="button"
+            className="footer-consent-link"
+            onClick={() => setOpenPreferences(true)}
+          >
+            Preferenze cookie
+          </button>
         </div>
       </footer>
+
+      {showCookieBanner ? (
+        <CookieBanner
+          onAccept={handleAcceptCookies}
+          onReject={handleRejectCookies}
+          canDismiss={cookieConsent !== null}
+          onDismiss={() => setOpenPreferences(false)}
+        />
+      ) : null}
     </div>
   );
 }

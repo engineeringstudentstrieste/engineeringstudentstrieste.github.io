@@ -298,6 +298,95 @@ main {
   color: var(--accent);
 }
 
+.events-carousel {
+  margin-top: 1.5rem;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 10px 25px rgba(23, 24, 24, 0.1);
+}
+
+.events-carousel:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.events-carousel-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.85rem;
+}
+
+.events-carousel-image {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+}
+
+.events-carousel-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(180deg, rgba(23, 24, 24, 0), rgba(23, 24, 24, 0.75));
+}
+
+.events-carousel-caption {
+  margin: 0;
+  color: var(--white);
+  font-weight: 600;
+}
+
+.events-carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.events-carousel-btn {
+  border: 1px solid rgba(23, 24, 24, 0.15);
+  background: var(--white);
+  color: var(--bg-dark);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.events-carousel-btn:hover {
+  border-color: var(--accent);
+}
+
+.events-carousel-btn:focus-visible,
+.events-carousel-dot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.events-carousel-dots {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.events-carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(25, 87, 90, 0.35);
+  cursor: pointer;
+}
+
+.events-carousel-dot.is-active {
+  background: var(--accent);
+}
+
 
 
 .contact-panel {
@@ -447,5 +536,9 @@ main {
   .cookie-banner {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .events-carousel-image {
+    max-height: 280px;
   }
 }

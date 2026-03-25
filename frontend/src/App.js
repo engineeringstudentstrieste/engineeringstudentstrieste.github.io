@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import logoSvg from './logo.svg';
+import eventPhotoMarch from './Pictures/20260311_184156.jpg';
 import CookieBanner from './components/CookieBanner';
 import { CONSENT_KEY, disableAnalytics, enableAnalytics } from './lib/analytics';
 
@@ -66,6 +67,14 @@ const supportActions = [
   },
 ];
 
+const eventPhotos = [
+  {
+    src: eventPhotoMarch,
+    alt: 'Partecipanti durante uno degli ultimi eventi di epsilon sigma tau a Trieste.',
+    caption: 'Ultimo evento epsilon sigma tau - Marzo 2026',
+  },
+];
+
 const Section = ({ id, title, kicker, variant = 'light', children }) => (
   <section id={id} className={`section section-${variant}`}>
     <div className="section-content">
@@ -81,6 +90,8 @@ function App() {
 
   const [cookieConsent, setCookieConsent] = useState(null);
   const [openPreferences, setOpenPreferences] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false);
 
   useEffect(() => {
     const savedConsent = localStorage.getItem(CONSENT_KEY);
@@ -114,6 +125,35 @@ function App() {
   };
 
   const showCookieBanner = cookieConsent === null || openPreferences;
+  const totalSlides = eventPhotos.length;
+  const activePhoto = eventPhotos[currentSlide] || eventPhotos[0];
+
+  useEffect(() => {
+    if (totalSlides < 2 || isCarouselPaused) {
+      return undefined;
+    }
+
+    const intervalId = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % totalSlides);
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [totalSlides, isCarouselPaused]);
+
+  const goToSlide = (index) => {
+    if (totalSlides < 2) return;
+    const normalizedIndex = (index + totalSlides) % totalSlides;
+    setCurrentSlide(normalizedIndex);
+  };
+
+  const handleCarouselKeyDown = (event) => {
+    if (event.key === 'ArrowLeft') {
+      goToSlide(currentSlide - 1);
+    }
+    if (event.key === 'ArrowRight') {
+      goToSlide(currentSlide + 1);
+    }
+  };
 
   return (
     <div className="site-root">
@@ -197,6 +237,70 @@ function App() {
               </article>
             ))}
           </div>
+
+          {activePhoto ? (
+            <div
+              className="events-carousel"
+              role="region"
+              tabIndex={0}
+              aria-label="Foto degli ultimi eventi"
+              onKeyDown={handleCarouselKeyDown}
+              onMouseEnter={() => setIsCarouselPaused(true)}
+              onMouseLeave={() => setIsCarouselPaused(false)}
+              onFocusCapture={() => setIsCarouselPaused(true)}
+              onBlurCapture={() => setIsCarouselPaused(false)}
+            >
+              <div className="events-carousel-frame">
+                <img src={activePhoto.src} alt={activePhoto.alt} className="events-carousel-image" />
+                <div className="events-carousel-overlay">
+                  <p className="events-carousel-caption">{activePhoto.caption}</p>
+                </div>
+              </div>
+
+              {totalSlides > 1 ? (
+                <div className="events-carousel-controls">
+                  <button
+                    type="button"
+                    className="events-carousel-btn"
+                    onClick={() => goToSlide(currentSlide - 1)}
+                    aria-label="Foto precedente"
+                  >
+                    Precedente
+                  </button>
+                  <button
+                    type="button"
+                    className="events-carousel-btn"
+                    onClick={() => goToSlide(currentSlide + 1)}
+                    aria-label="Foto successiva"
+                  >
+                    Successiva
+                  </button>
+                  <button
+                    type="button"
+                    className="events-carousel-btn"
+                    onClick={() => setIsCarouselPaused((prev) => !prev)}
+                    aria-label={isCarouselPaused ? 'Riprendi autoplay' : 'Metti in pausa autoplay'}
+                  >
+                    {isCarouselPaused ? 'Play' : 'Pausa'}
+                  </button>
+                </div>
+              ) : null}
+
+              {totalSlides > 1 ? (
+                <div className="events-carousel-dots" aria-label="Selezione foto evento">
+                  {eventPhotos.map((photo, index) => (
+                    <button
+                      key={photo.caption}
+                      type="button"
+                      className={`events-carousel-dot ${index === currentSlide ? 'is-active' : ''}`}
+                      onClick={() => goToSlide(index)}
+                      aria-label={`Vai alla foto ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </Section>
 
         <Section id="contatti" kicker="Parliamone" title="Contatti">

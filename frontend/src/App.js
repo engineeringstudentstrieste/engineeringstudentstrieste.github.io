@@ -4,9 +4,6 @@ import logoSvg from './logo.svg';
 import CookieBanner from './components/CookieBanner';
 import { CONSENT_KEY, disableAnalytics, enableAnalytics } from './lib/analytics';
 
-// API base (can be overridden with REACT_APP_API_URL in .env)
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
 // Navigation anchors used by the sticky navbar.
 const navLinks = [
     { label: 'Home', target: 'home' },
@@ -15,7 +12,6 @@ const navLinks = [
     { label: 'Eventi', target: 'eventi' },
     { label: 'Contatti', target: 'contatti' },
     { label: 'Supportaci', target: 'supportaci' },
-    { label: 'Login', target: 'login' },
 ];
 
 // Highlighted initiatives and labs the student association curates.
@@ -39,19 +35,19 @@ const initiatives = [
 
 const events = [
   {
-    title: 'AperiDIA',
-    date: 'date to be announced',
-    description: 'Aperitivo del Dipartimento di Ingegneria e Architettura a cui εστ sarà presente.',
+    title: 'Assemblea dei Soci',
+    date: '31 marzo 2026',
+    description: 'Assemblea periodica dei soci εστ seguita da aperitivo aperto ai soci.',
   },
   {
-    title: 'Assemblea e Brindisi',
-    date: '10 dicembre 2025',
-    description: 'Assemblea periodica dei soci εστ seguita da brindisi natalizio aperto ai soci.',
+    title: 'Conferenza',
+    date: 'date to be announced',
+    description: 'Stay tuned',
   },
   {
-    title: 'Open Day',
+    title: 'Aperitivo',
     date: 'date to be announced',
-    description: 'Open day dei laboratori εστ per conoscere team, progetti e iscrizioni.',
+    description: 'Stay tuned',
   },
 ];
 
@@ -83,13 +79,6 @@ const Section = ({ id, title, kicker, variant = 'light', children }) => (
 function App() {
   const currentYear = new Date().getFullYear();
 
-  // Member auth (token-based when backend available)
-  const [member, setMember] = useState(null);
-  const [token, setToken] = useState(null);
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [loginError, setLoginError] = useState('');
-  const [loadingAuth, setLoadingAuth] = useState(false);
   const [cookieConsent, setCookieConsent] = useState(null);
   const [openPreferences, setOpenPreferences] = useState(false);
 
@@ -109,94 +98,6 @@ function App() {
 
     setCookieConsent(null);
   }, []);
-
-  useEffect(() => {
-    // Try to restore token and member from localStorage
-    const storedToken = localStorage.getItem('est_token');
-    const storedMember = localStorage.getItem('est_member');
-    if (storedToken) {
-      setToken(storedToken);
-      // verify token with backend
-      (async () => {
-        setLoadingAuth(true);
-        try {
-          const res = await fetch(`${API_BASE}/api/auth/me`, {
-            headers: { Authorization: `Bearer ${storedToken}` },
-          });
-          if (res.ok) {
-            const data = await res.json();
-            setMember(data.user);
-            localStorage.setItem('est_member', JSON.stringify(data.user));
-          } else {
-            // token invalid or server unreachable: fallback to stored member if present
-            if (storedMember) setMember(JSON.parse(storedMember));
-            else {
-              localStorage.removeItem('est_token');
-              setToken(null);
-            }
-          }
-        } catch (err) {
-          // network error: fallback to stored member (if any)
-          if (storedMember) setMember(JSON.parse(storedMember));
-        } finally {
-          setLoadingAuth(false);
-        }
-      })();
-    } else if (storedMember) {
-      // no token but stored member => keep demo session
-      try {
-        setMember(JSON.parse(storedMember));
-      } catch (e) { /* ignore */ }
-    }
-  }, []);
-
-  const handleLogin = async () => {
-    setLoginError('');
-    if (!loginEmail || !loginPassword) {
-      setLoginError('Inserisci email e password');
-      return;
-    }
-
-    // Try backend login first
-    try {
-      setLoadingAuth(true);
-      const res = await fetch(`${API_BASE}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setToken(data.token);
-        setMember(data.user);
-        localStorage.setItem('est_token', data.token);
-        localStorage.setItem('est_member', JSON.stringify(data.user));
-        setLoginEmail('');
-        setLoginPassword('');
-        return;
-      }
-      // non-ok: show error from server
-      const err = await res.json().catch(() => ({}));
-      setLoginError(err.message || 'Autenticazione fallita');
-    } catch (err) {
-      // Network or backend down -> fallback to demo client-side auth
-      console.warn('Backend auth failed, falling back to demo mode', err);
-      const m = { email: loginEmail, name: loginEmail.split('@')[0] };
-      setMember(m);
-      localStorage.setItem('est_member', JSON.stringify(m));
-      setLoginEmail('');
-      setLoginPassword('');
-    } finally {
-      setLoadingAuth(false);
-    }
-  };
-
-  const handleLogout = () => {
-    setMember(null);
-    setToken(null);
-    localStorage.removeItem('est_member');
-    localStorage.removeItem('est_token');
-  };
 
   const handleAcceptCookies = () => {
     localStorage.setItem(CONSENT_KEY, 'accepted');
@@ -249,9 +150,9 @@ function App() {
         </div>
         <div className="hero-card">
           <p className="hero-card-kicker">Prossimo highlight</p>
-          <h3>Assemblea dei Soci · 10 dicembre</h3>
+          <h3>Assemblea dei Soci · 31 marzo</h3>
           <p>
-            Unisciti a noi per l&apos;assemblea periodica dei soci εστ, seguita da un brindisi natalizio aperto a tutti i membri.
+            Unisciti a noi per l&apos;assemblea periodica dei soci εστ, seguita da un aperitivo aperto a tutti i membri.
           </p>
           <a className="btn secondary" href="#eventi">
             Vai agli eventi
@@ -355,64 +256,6 @@ function App() {
           <p className="center-text">
             Scrivici a <a href="mailto:engineeringstudentstrieste@gmail.com">engineeringstudentstrieste@gmail.com</a> per ricevere il media kit completo.
           </p>
-        </Section>
-
-        {/* LOGIN SECTION */}
-        <Section id="login" kicker="Area soci" title="Login soci">
-          {/* if not logged in show form, else show member area */}
-          {!member ? (
-            <div className="contact-form">
-              {loginError && <div style={{ color: 'crimson' }}>{loginError}</div>}
-              <label>
-                Email
-                <input
-                  type="email"
-                  placeholder="E-mail"
-                  value={loginEmail}
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                />
-              </label>
-              <label>
-                Password
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={loginPassword}
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                />
-              </label>
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <button
-                  type="button"
-                  className="btn primary"
-                  onClick={handleLogin}
-                  disabled={loadingAuth}
-                >
-                  {loadingAuth ? 'Accesso in corso...' : 'Accedi'}
-                </button>
-                <button type="button" className="btn ghost" onClick={() => { setLoginEmail(''); setLoginPassword(''); setLoginError(''); }}>
-                  Reset
-                </button>
-              </div>
-              <p style={{ marginTop: '0.75rem', color: '#6b7280' }}>
-                Nota: questa è una demo client-side. Per l'autenticazione reale serve un backend sicuro.
-              </p>
-            </div>
-          ) : (
-            <div className="card">
-              <h3>Benvenuto, {member.name}</h3>
-              <p>{token ? 'Sessione verificata dal backend.' : 'Sessione demo locale.'}</p>
-              <p>Area riservata ai soci: qui puoi trovare risorse, bacheca e iscrizioni.</p>
-              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
-                <button className="btn secondary" onClick={() => alert('Sezione membri (demo)')}>
-                  Bacheca soci
-                </button>
-                <button className="btn ghost" onClick={handleLogout}>
-                  Esci
-                </button>
-              </div>
-            </div>
-          )}
         </Section>
 
       </main>

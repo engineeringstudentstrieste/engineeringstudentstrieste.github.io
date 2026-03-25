@@ -1,3 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
+
+Host: https://engineeringstudentstrieste.github.io/
+Sitemap: https://engineeringstudentstrieste.github.io/sitemap.xml
+

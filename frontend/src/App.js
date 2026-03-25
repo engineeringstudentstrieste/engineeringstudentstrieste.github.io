@@ -257,6 +257,7 @@ function App() {
                 </div>
               </div>
 
+
               {totalSlides > 1 ? (
                 <div className="events-carousel-controls">
                   <button

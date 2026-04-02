@@ -391,6 +391,7 @@ function App() {
             <footer className="site-footer">
                 <p>© {currentYear} εστ - Engineering Students of Trieste · Trieste</p>
                 <div className="footer-links">
+                    <a href="https://drive.google.com/file/d/1L6zINUpXpdclNhO46JNOLs52hG3wWM8s/view?usp=sharing">Statuto</a>
                     <a href="https://drive.google.com/file/d/1HpSKM8S9NzN2G14KpAb6P4QshLbeMI-F/view?usp=sharing">Manifesto</a>
                     <a href="#eventi">Calendario</a>
                     <a href="#contatti">Unisciti a noi</a>

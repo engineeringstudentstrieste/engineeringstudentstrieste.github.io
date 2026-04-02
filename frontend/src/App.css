@@ -519,16 +519,21 @@ main {
 .footer-links {
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
 .footer-consent-link {
   background: none;
   border: none;
+  display: inline-flex;
+  align-items: center;
   color: inherit;
   font: inherit;
+  line-height: 1;
   padding: 0;
   cursor: pointer;
   text-decoration: underline;
+  appearance: none;
 }
 
 .cookie-banner {
